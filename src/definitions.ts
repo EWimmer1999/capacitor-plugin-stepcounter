@@ -1,3 +1,7 @@
 export interface StepCounterPlugin {
-  echo(options: { value: string }): Promise<{ value: string }>;
+
+  start():Promise<void>
+  getStepCount():Promise<{steps: number}>
+  stop():Promise<void>
+  
 }

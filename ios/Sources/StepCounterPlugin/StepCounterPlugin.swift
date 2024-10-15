@@ -1,23 +1,33 @@
+// ios/StepCounterPlugin.swift
 import Foundation
 import Capacitor
+import CoreMotion
 
-/**
- * Please read the Capacitor iOS Plugin Development Guide
- * here: https://capacitorjs.com/docs/plugins/ios
- */
 @objc(StepCounterPlugin)
-public class StepCounterPlugin: CAPPlugin, CAPBridgedPlugin {
-    public let identifier = "StepCounterPlugin"
-    public let jsName = "StepCounter"
-    public let pluginMethods: [CAPPluginMethod] = [
-        CAPPluginMethod(name: "echo", returnType: CAPPluginReturnPromise)
-    ]
-    private let implementation = StepCounter()
+public class StepCounterPlugin: CAPPlugin {
+    let pedometer = CMPedometer()
 
-    @objc func echo(_ call: CAPPluginCall) {
-        let value = call.getString("value") ?? ""
-        call.resolve([
-            "value": implementation.echo(value)
-        ])
+    @objc func start(_ call: CAPPluginCall) {
+        if CMPedometer.isStepCountingAvailable() {
+            pedometer.startPedometerUpdates(from: Date()) { (data, error) in
+                if let error = error {
+                    call.reject("Error: \(error.localizedDescription)")
+                    return
+                }
+                let steps = data?.numberOfSteps.intValue ?? 0
+                call.resolve(["steps": steps])
+            }
+        } else {
+            call.reject("Step counting not available.")
+        }
+    }
+
+    @objc func stop(_ call: CAPPluginCall) {
+        pedometer.stopPedometerUpdates()
+        call.resolve()
+    }
+
+    @objc func getStepCount(_ call: CAPPluginCall) {
+        // Implementiere die Logik hier, um die Anzahl der Schritte zu liefern
     }
 }
