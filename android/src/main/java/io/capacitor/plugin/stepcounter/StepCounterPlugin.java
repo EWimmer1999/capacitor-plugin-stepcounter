@@ -57,7 +57,6 @@ public class StepCounterPlugin extends Plugin implements SensorEventListener {
             Log.d("StepCounterPlugin", "SensorManager ist null");
         }
     }
-    
 
     @Override
     public void onSensorChanged(SensorEvent event) {
@@ -89,8 +88,8 @@ public class StepCounterPlugin extends Plugin implements SensorEventListener {
     @PluginMethod()
     public void getStepCount(PluginCall call) {
         JSObject ret = new JSObject();
-        ret.put("steps", stepCount); // Verwende den aktuellen Schrittwert
-        call.resolve(ret); // Rückgabe des Wertes an den Aufrufer
+        ret.put("steps", stepCount);
+        call.resolve(ret);
     }
 
 

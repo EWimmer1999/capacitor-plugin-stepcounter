@@ -1,5 +1,5 @@
-// src/web.ts
 import { WebPlugin } from '@capacitor/core';
+
 import type { StepCounterPlugin } from './definitions';
 
 export class StepCounterWeb extends WebPlugin implements StepCounterPlugin {
